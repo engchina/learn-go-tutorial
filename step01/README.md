@@ -1,39 +1,39 @@
-# Step 01: Input and Output
+# 第01步：输入和输出
 
-In this lesson you will learn how to:
+在本课中，你将学习如何：
 
-- Read from a file
-- Print to the standard output
-- Handle multiple return values
-- Handle errors
-- Create and add an element to a slice
-- Range loop over a slice
-- Defer a function call
-- Log errors
+- 从文件中读取
+- 打印到标准输出
+- 处理多个返回值
+- 处理错误
+- 创建并添加一个元素到一个切片
+- 在一个切片上进行范围循环
+- 延迟一个函数的调用
+- 记录错误
 
-## Overview
+## 概述
 
-We've got the basics covered, now it's time to get this game started!
+我们已经掌握了基础知识，现在是时候开始这个游戏了！
 
-First, we are going to read the maze data. We have a file called `maze01.txt` that's basically an ASCII representation of the maze (you can open it in a text editor if you like). You may assume that:
+首先，我们要读取迷宫的数据。我们有一个叫做`maze01.txt`的文件，基本上是迷宫的ASCII表示（如果你愿意，可以用文本编辑器打开它）。你可以假设：
 
 ```
-- # represents a wall
-- . represents a dot
-- P represents the player
-- G represents the ghosts (enemies)
-- X represents the power up pills
+- # 代表一堵墙
+- . 代表一个点
+- P 代表玩家
+- G 代表鬼魂（敌人）
+- X 代表力量增强的药丸
 ```
 
-Our first task consists of loading this ASCII representation of the maze to a slice of strings and then printing it to the screen. Looks simple, right? It is indeed!
+我们的第一个任务包括将这个迷宫的ASCII表示法加载到一个字符串片断中，然后将其打印到屏幕上。看起来很简单，对吗？的确如此！
 
-## Task 01: Load the Maze
+## 任务01：加载迷宫
 
-Let's start by reading the `maze01.txt` file.
+让我们从读取`maze01.txt`文件开始。
 
-We are going to use the function `Open` from the `os` package to open it, and a scanner object from the buffered IO package (`bufio`) to read it to memory (to a global variable called `maze`). Finally we need to release the file handler by calling `os.Close`.
+我们将使用`os`包中的函数`Open`来打开它，并使用缓冲IO包（`bufio`）中的扫描器对象将其读入内存（到一个名为`maze`的全局变量）。最后我们需要通过调用`os.Close`来释放文件处理程序。
 
-All that comes together as the code below:
+所有这些都是下面的代码。
 
 ```go
 var maze []string
@@ -55,16 +55,16 @@ func loadMaze(file string) error {
 }
 ```
 
-Now let's break it down and see what's going on.
+现在让我们把它分解，看看发生了什么事。
 
-Please note that you need to import `bufio` and `os` packages as shown below:
+请注意，你需要导入`bufio`和`os`包，如下所示。
 
 ```go
 import "bufio"
 import "os"
 ```
 
-Alternatively, since you already have one import (`fmt`), you can add it as a list:
+另外，由于你已经有一个导入（`fmt`），你可以把它作为一个列表添加。
 
 ```go
 import (
@@ -74,19 +74,19 @@ import (
 )
 ```
 
-The `os.Open()` function returns a pair of values: a file and an error. Returning multiple values from a function is a common pattern in Go, specially for returning errors.
+`os.Open()`函数返回一对值：一个文件和一个错误。从一个函数中返回多个值是Go中的一个常见模式，特别是在返回错误时。
 
 ```go
 f, err := os.Open(file)
 ```
 
-The `:=` operator is an assignment operator, but with the special property that it automatically infers the type of the variable(s) based on the value(s) on the right hand side.
+`:=`运算符是一个赋值运算符，但它有一个特殊的属性，即根据右边的值自动推断变量的类型。
 
-Keep in mind that Go is a strongly typed language, but that nice feature saves us the trouble of specifying the type when it's possible to infer it.
+请记住，Go是一种强类型语言，但是这个很好的特性使我们在可以推断类型的时候省去了指定类型的麻烦。
 
-In the case above, Go automatically infers the type for both `f` and `err` variables.
+在上面的例子中，Go自动推断了`f`和`err`两个变量的类型。
 
-When a function returns an error it is a common pattern to check the error immediately afterwards:
+当一个函数返回一个错误时，紧接着检查这个错误是一个常见的模式。
 
 ```go
     f, err := os.Open(file)
@@ -97,11 +97,11 @@ When a function returns an error it is a common pattern to check the error immed
     }
 ```
 
-Note: It is a good practice to keep the "happy path" aligned to the left, and the sad path to the right (i.e., terminating the function early).
+注意：保持"快乐路径(happy path)"向左对齐，"悲伤路径(sad path)"向右对齐（即提前终止函数）是一个好的做法。
 
-`nil` in Go means no value is assigned to a variable.
+`nil`在Go中意味着没有给一个变量赋值。
 
-The `if` statement executes a statement if the condition is true. It can optionally have an initialization clause just like the `for` statement, and an `else` clause that runs if the condition is false. Please keep in mind that the scope of the variable created will just be the if statement body. For example:
+如果条件为真，`if`语句会执行一个语句。它可以像`for`语句一样有一个初始化子句，还有一个`else`子句，在条件为假时运行。请记住，创建的变量的范围将只是if语句的主体。比如说：
 
 ```go
 // optional initialization clause
@@ -113,7 +113,7 @@ if foo := rand.Intn(2); foo == 0 {
 // but you can't use foo here!
 ```
 
-Another interesting aspect of the `loadMaze` code is the use of the `defer` keyword. It basically says to call the function after `defer` at the end of the current function. It is very useful for cleanup purposes and in this case we are using it to close the file we've just opened:
+`loadMaze`代码的另一个有趣的方面是`defer`关键字的使用。它基本上是说在当前函数的末尾调用`defer`之后的函数。它对清理工作非常有用，在本例中，我们用它来关闭我们刚刚打开的文件。
 
 ```go
 func loadMaze(file) error {
@@ -128,7 +128,7 @@ func loadMaze(file) error {
 }
 ```
 
-The next part of the code just reads the file line by line and appends it to the maze slice:
+代码的下一部分只是逐行读取文件并将其追加到`maze`切片中。
 
 ```go
     scanner := bufio.NewScanner(f)
@@ -138,15 +138,15 @@ The next part of the code just reads the file line by line and appends it to the
     }
 ```
 
-A scanner is a very convenient way to read a file. `scanner.Scan()` will return true while there is something to be read from the file, and `scanner.Text()` will return the next line of input.
+`scanner`是读取文件的一种非常方便的方式。`scanner.Scan()`会在有东西要从文件中读取时返回true，`scanner.Text()`会返回下一行的输入。
 
-The `append` built-in function is responsible for adding a new element to the `maze` slice.
+`append`内置函数负责向`maze`切片添加新元素。
 
-## Task 02: Printing to the Screen
+## 任务02：打印到屏幕上
 
-Once we have the maze file loaded into memory we need to print it to the screen.
+一旦我们将迷宫(maze)文件加载到内存中，我们需要将其打印到屏幕上。
 
-One way to do that is to iterate over each entry in the `maze` slice and print it. This can be conveniently done with the `range` operator:
+一种方法是遍历`maze`切片中的每一个条目并打印它。这可以通过`range`操作符方便地完成。
 
 ```go
 func printScreen() {
@@ -156,11 +156,11 @@ func printScreen() {
 }
 ```
 
-Please note that we are using the `:=` assignment operator to initialize two values: the underscore (_) and the `line` variable. The underscore is just a placeholder for where the compiler would expect a variable name. Using the underscore means that we are ignoring that value.
+请注意，我们正在使用`:=`赋值运算符来初始化两个值：下划线（_）和`line`变量。下划线只是一个占位符，用来表示编译器对变量名称的期望。使用下划线意味着我们要忽略这个值。
 
-In the case of the `range` operator, the first return value is the index of the element, starting from zero. The second return value is the value itself.
+在`range`操作符的情况下，第一个返回值是元素的索引，从0开始。第二个返回值是值本身。
 
-If we did not write the underscore character to ignore the first value, the range operator would return just the index (and not the value). For example:
+如果我们不写下划线字符来忽略第一个值，range操作符将只返回索引（而不是值）。比如说：
 
 ```go
 for idx := range maze {
@@ -168,11 +168,11 @@ for idx := range maze {
 }
 ```
 
-Since in this case we only care about the content and not the index, we can safely ignore the index by assigning it to the underscore.
+因为在这种情况下，我们只关心内容而不关心索引，所以我们可以安全地忽略索引，把它赋值给下划线。
 
-## Task 03: Updating the game loop
+## 任务03：更新游戏循环
 
-Now that we have both `loadMaze` and `printScreen` functions, we should update the `main` function to initialize the maze and print it on the game loop. See the code below:
+现在我们有了`loadMaze'和`printScreen'两个函数，我们应该更新`main'函数来初始化迷宫并在游戏循环中打印它。请看下面的代码。
 
 ```go
 func main() {
@@ -206,7 +206,7 @@ func main() {
 }
 ```
 
-Like always we are keeping the happy path to the left, so if the `loadMaze` function fails we use `log.Println` to log it and then `return` to terminate the program execution. Since we are using a new package, `log`, please make sure it is added to the import section:
+像往常一样，我们保持快乐的路径，所以如果`loadMaze`函数失败，我们使用`log.Println`来记录它，然后`return`来终止程序执行。由于我们使用了一个新的包，`log`，请确保它被添加到导入部分。
 
 ```go
 import (
@@ -217,16 +217,14 @@ import (
 )
 ```
 
-Some IDEs, like `vscode`, can be configured to do this automatically for you.
+注意：也可以使用`log.Fatalln`达到同样的效果，但我们需要确保任何延迟调用在退出`main`函数之前执行，`log.Fatal`系列的函数通过内部调用`os.Exit(1)`跳过延迟函数调用。我们在main函数中还没有任何延迟调用，但我们将在下一章添加一个。
 
-Note: one could also use `log.Fatalln` for the same effect, but we need to make sure that any deferred calls are executed before exiting the `main` function, and functions in the `log.Fatal` family skip deferred function calls by calling `os.Exit(1)` internally. We don't have any deffered calls in the main function yet, but we will add one in the next chapter.
-
-Now that we've finished the game loop modifications we can run the program with `go run` or compile it with `go build` and run it as a standalone program.
+现在我们已经完成了游戏循环的修改，我们可以用`go run`来运行程序，或者用`go build`来编译，然后作为一个独立的程序运行。
 
 ```sh
 go run main.go
 ```
 
-You should see the maze printed to the terminal.
+你应该可以看到打印到终端的迷宫。
 
-[Take me to step 02!](../step02/README.md)
+[带我到第02步！](../step02/README.md)
